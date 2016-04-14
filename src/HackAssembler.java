@@ -2,10 +2,7 @@ import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Dictionary;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created by Amitai Sopher on 12/04/2016.
@@ -16,7 +13,8 @@ public class HackAssembler {
     String[][] destTable;
     String[][] computationTableForA;
     String[][] computationTableForM;
-    List<String> symbolTable[];
+    HashMap symbolTable = new HashMap<String,String>();
+
     public HackAssembler (String inputFileName) {
         //this.inputFile = "shit.txt";
         this.inputFile = inputFileName;
@@ -28,8 +26,23 @@ public class HackAssembler {
                                                      {"101010","111111","111010","001100","110000","001101","110001","001111","110011","011111","110111","001110","110010","000010","010011","000111","000000","010101"}};
         this.computationTableForM = new String [][] {{"0","1","-1","D","M","!D","!M","-D","-M","D+1","M+1","D-1","M-1","D+M","D-M","M-D","D&M","D|M"},
                                                      {"101010","111111","111010","001100","110000","001101","110001","001111","110011","011111","110111","001110","110010","000010","010011","000111","000000","010101"}};
-        this.symbolTable[0] = new ArrayList<String>(Arrays.asList("R0","R1","R2","R3","R4","R5","R6","R7","R8","R9","R10","R11","R12","R13","R14","R15"));
-        this.symbolTable[1] = new ArrayList<String>(Arrays.asList("0","1","2","4","5","6","7","8","9","10","11","12","13","14","15"));
+        this.symbolTable.put("R0","0");
+        this.symbolTable.put("R1","1");
+        this.symbolTable.put("R2","2");
+        this.symbolTable.put("R3","3");
+        this.symbolTable.put("R4","4");
+        this.symbolTable.put("R5","5");
+        this.symbolTable.put("R6","6");
+        this.symbolTable.put("R7","7");
+        this.symbolTable.put("R8","8");
+        this.symbolTable.put("R9","9");
+        this.symbolTable.put("R10","10");
+        this.symbolTable.put("R11","11");
+        this.symbolTable.put("R12","12");
+        this.symbolTable.put("R13","13");
+        this.symbolTable.put("R14","14");
+        this.symbolTable.put("R15","15");
+
     }
 
     /*public String readNextLine() {
