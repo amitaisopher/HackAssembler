@@ -3,7 +3,10 @@
  */
 public class test {
     public static void main(String[] args) {
-        HackAssembler assembler = new HackAssembler("shit.txt");
+        HackAssembler assembler = new HackAssembler("C:\\Users\\Amitai Sopher\\IdeaProjects\\HackAssembler\\src\\shit.txt");
+        assembler.symbolTableUpdater();
         System.out.println(assembler.symbolTable.entrySet());
+        //System.out.println(assembler.readLineNumber(2));
+        //System.out.println("The number of lines that in input file are " + assembler.numOfLinesInInputFile());
     }
 }

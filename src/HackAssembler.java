@@ -42,9 +42,96 @@ public class HackAssembler {
         this.symbolTable.put("R13","13");
         this.symbolTable.put("R14","14");
         this.symbolTable.put("R15","15");
+        this.symbolTable.put("SCREEN","16384");
+        this.symbolTable.put("KBD","24576");
 
     }
 
+    public int numOfLinesInInputFile () {
+        String fileName = this.inputFile;
+        String line = null;
+        int n = 0;
+
+        BufferedReader bufferedReader = null;
+        try {
+            // FileReader reads text files in the default encoding...
+            FileReader fileReader = new FileReader(fileName);
+
+            // Always wrap FileReader in BufferReader.
+            bufferedReader = new BufferedReader(fileReader);
+
+            line = bufferedReader.readLine();
+            while (line != null) {
+                n++;
+                line = bufferedReader.readLine();
+            }
+        } catch (FileNotFoundException ex) {
+            System.out.println("Unable to open file '" + this.inputFile + "'");
+        } catch (IOException ex) {
+            System.out.println("Error reading file '" + this.inputFile + "'");
+        } finally {
+            try {
+                // Always close files.
+                if (bufferedReader != null){
+                    bufferedReader.close();
+                }
+            } catch (IOException e) {
+
+            }
+        }
+        return n;
+    }
+
+    public String readLineNumber (int n) {
+        String fileName = this.inputFile;
+        String line = "";
+        if (n > this.numOfLinesInInputFile()) {
+            System.out.println("The input file contains less rows than the requested row number");
+        } else {
+            BufferedReader bufferedReader = null;
+            try {
+                // FileReader reads text files in the default encoding...
+                FileReader fileReader = new FileReader(fileName);
+
+                // Always wrap FileReader in BufferReader.
+                bufferedReader = new BufferedReader(fileReader);
+                for (int i = 0; i < n ; i++) {
+                    line = bufferedReader.readLine();
+                }
+            } catch (FileNotFoundException ex) {
+                System.out.println("Unable to open file '" + this.inputFile + "'");
+            } catch (IOException ex) {
+                System.out.println("Error reading file '" + this.inputFile + "'");
+            } finally {
+                try {
+                    // Always close files.
+                    if (bufferedReader != null){
+                        bufferedReader.close();
+                    }
+                } catch (IOException e) {
+
+                }
+            }
+        }
+
+        return line;
+    }
+
+    public void symbolTableUpdater() {
+        int realCommandCounter = 0;
+        for (int i = 0; i < this.numOfLinesInInputFile(); i++) {
+            String line = this.readLineNumber(i+1);
+            if (!line.startsWith("//") && !(line.startsWith("(") && line.endsWith(")")) && (line.trim().length() > 0)) {
+                realCommandCounter++;
+            }
+            if (line.startsWith("(") && line.endsWith(")")){
+                line = line.substring(1,line.length()-1);
+                System.out.println("The current line is " + line + " and the current realCommandCounter value is: " + realCommandCounter);
+                this.symbolTable.put(line, realCommandCounter);
+            }
+
+        }
+    }
     /*public String readNextLine() {
         // This will reference one line at a time.
         //String line = null;
