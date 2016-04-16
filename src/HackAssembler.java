@@ -7,6 +7,7 @@ import java.util.*;
 public class HackAssembler {
     String inputFile;
     String tempFile;
+    String outputFile;
     String[][] jumpTable;
     String[][] destTable;
     String[][] computationTableForA;
@@ -14,9 +15,9 @@ public class HackAssembler {
     HashMap symbolTable = new HashMap<String,String>();
 
     public HackAssembler (String inputFileName) {
-        //this.inputFile = "shit.txt";
         this.inputFile = inputFileName;
         this.tempFile = "C:\\Users\\Amitai Sopher\\IdeaProjects\\HackAssembler\\src\\temporaryFile.txt";
+        this.outputFile = "C:\\Users\\Amitai Sopher\\IdeaProjects\\HackAssembler\\src\\MachineCodeFile.txt";
         this.jumpTable = new String [][] {{"null","JGT","JEQ","JGE","JLT","JNE","JLE","JMP"},
                                           {"000","001","010","011","100","101","110","111",}};
         this.destTable = new String [][] {{"null","M","D","MD","A","AM","AD","AMD"},
@@ -49,11 +50,11 @@ public class HackAssembler {
         this.symbolTable.put("THIS","3");
         this.symbolTable.put("THAT","4");
 
-        this.deleteTempfile();
+        this.deleteTempfile(this.tempFile);
+        this.deleteTempfile(this.outputFile);
     }
 
-    public int numOfLinesInInputFile () {
-        String fileName = this.inputFile;
+    public int numOfLinesInFile(String fileName) {
         String line = null;
         int n = 0;
 
@@ -87,10 +88,10 @@ public class HackAssembler {
         return n;
     }
 
-    private void deleteTempfile() {
+    private void deleteTempfile(String fileName) {
         try{
 
-            File file = new File(this.tempFile);
+            File file = new File(fileName);
 
             if(file.delete()){
                 System.out.println(file.getName() + " is deleted!");
@@ -105,10 +106,9 @@ public class HackAssembler {
         }
     }
 
-    public String readLineNumber (int n) {
-        String fileName = this.inputFile;
+    public String readLineNumber (int n, String fileName) {
         String line = "";
-        if (n > this.numOfLinesInInputFile()) {
+        if (n > this.numOfLinesInFile(this.inputFile)) {
             System.out.println("The input file contains less rows than the requested row number");
         } else {
             BufferedReader bufferedReader = null;
@@ -140,8 +140,7 @@ public class HackAssembler {
         return line;
     }
 
-    public void writeLineToFile (String line) {
-        String outputFileName = "C:\\Users\\Amitai Sopher\\IdeaProjects\\HackAssembler\\src\\temporaryFile.txt";
+    public void writeLineToFile (String line, String outputFileName) {
         BufferedWriter bufferedWriter = null;
 
         try {
@@ -172,10 +171,9 @@ public class HackAssembler {
 
     public void firstPass() {
         int realCommandCounter = 0;
-        int variableCounter = 16;
         boolean isLastLine = false;
-        for (int i = 0; i < this.numOfLinesInInputFile(); i++) {
-            String line = this.readLineNumber(i+1);
+        for (int i = 0; i < this.numOfLinesInFile(this.inputFile); i++) {
+            String line = this.readLineNumber(i+1, this.inputFile);
 
             // Filtering empty lines and comments and writing only pure instructions to a temporary file.
             if (!line.startsWith("//") &&(line.trim().length() > 0)) {
@@ -185,7 +183,7 @@ public class HackAssembler {
                     line = line.trim();
                 }
                 //System.out.println(line);
-                this.writeLineToFile(line);
+                this.writeLineToFile(line,this.tempFile);
             }
 
             if (!line.startsWith("//") && !(line.startsWith("(") && line.endsWith(")")) && (line.trim().length() > 0)) {
@@ -213,25 +211,56 @@ public class HackAssembler {
 
         }
     }
-    /*public String readNextLine() {
-        // This will reference one line at a time.
-        //String line = null;
 
-        BufferedReader bufferedReader = null;
-        String line = null;
-        try {
-            // FileReader reads text files in the default encoding...
-            FileReader fileReader = new FileReader(this.inputFile);
-
-            // Always wrap FileReader in BufferReader.
-            bufferedReader = new BufferedReader(fileReader);
-            line = bufferedReader.readLine();
-
-
-        } catch (FileNotFoundException ex) {
-            System.out.println("Unable to open file '" + this.inputFile + "'");
-        } catch (IOException ex) {
-            System.out.println("Error reading file '" + this.inputFile + "'");
+    // This method takes a line of hack assembly language and convert it into Hack Machine Code using the object internal symbol tables after they were updated by the firstPass method.
+    public void hackAssemblyParser () {
+        boolean isAInstruction = false;
+        boolean isCInstruction = false;
+        int variableCounter = 16;
+        for (int i = 0; i < this.numOfLinesInFile(this.tempFile); i++) {
+            String line = readLineNumber(i+1,tempFile);
+            variableCounter = parseAInstruction(variableCounter, line);
+            // Function to parse C instruction should go below.
         }
-        return line; */
+    }
+
+    private int parseAInstruction(int variableCounter, String line) {
+        // Handling variables
+        if (line.startsWith("@")) {
+            line = line.substring(1,line.length());
+
+            // If it is a new variable add it to symbol table, assign address to it and replace the variable name with address in the line.
+            if (!this.symbolTable.containsKey(line)) {
+                //System.out.println("Detected variable " + line + " and the current Variable Counter value is: " + variableCounter);
+                this.symbolTable.put(line, variableCounter);
+                line = convertAInstructionToBinaryCode(variableCounter);
+                writeLineToFile(line,this.outputFile);
+                variableCounter++;
+            } else {
+                line = (String) this.symbolTable.get(line);
+                line = convertAInstructionToBinaryCode(Integer.parseInt(line));
+                writeLineToFile(line,this.outputFile);
+            }
+        }
+
+        // Check if this is a label
+        if ((line.startsWith("(") && line.endsWith(")"))) {
+            line = line.substring(1,line.length()-1);
+            line = "@" + this.symbolTable.get(line);
+            writeLineToFile(line,this.outputFile);
+        }
+        return variableCounter;
+    }
+
+    private String convertAInstructionToBinaryCode(int variableCounter) {
+        String line;
+        line = Integer.toBinaryString(variableCounter);
+        int lineLength = 16 - line.length();
+        if (lineLength < 16) {
+            for (int j = 0; j < lineLength ; j++) {
+                line = "0" + line;
+            }
+        }
+        return line;
+    }
 }

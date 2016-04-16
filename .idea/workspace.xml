@@ -2,16 +2,12 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="728f9498-5491-4383-a294-6d10ee3af556" name="Default" comment="">
-      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/modules.xml" afterPath="" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/compiler.xml" afterPath="$PROJECT_DIR$/.idea/compiler.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/encodings.xml" afterPath="$PROJECT_DIR$/.idea/encodings.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/misc.xml" afterPath="$PROJECT_DIR$/.idea/misc.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/uiDesigner.xml" afterPath="$PROJECT_DIR$/.idea/uiDesigner.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/vcs.xml" afterPath="$PROJECT_DIR$/.idea/vcs.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/HackAssembler/HackAssembler.class" afterPath="$PROJECT_DIR$/out/production/HackAssembler/HackAssembler.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/HackAssembler/HackAssemblerParser.class" afterPath="$PROJECT_DIR$/out/production/HackAssembler/HackAssemblerParser.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/HackAssembler/test.class" afterPath="$PROJECT_DIR$/out/production/HackAssembler/test.class" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/HackAssembler.iml" afterPath="$PROJECT_DIR$/HackAssembler.iml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/HackAssembler.java" afterPath="$PROJECT_DIR$/src/HackAssembler.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/shit.txt" afterPath="$PROJECT_DIR$/src/shit.txt" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/HackassemblerParser.java" afterPath="$PROJECT_DIR$/src/HackassemblerParser.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/test.java" afterPath="$PROJECT_DIR$/src/test.java" />
     </list>
     <ignored path="HackAssembler.iws" />
@@ -38,7 +34,7 @@
         <entry file="file://$PROJECT_DIR$/src/HackAssemblerParser.java">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="4" column="13" selection-start-line="4" selection-start-column="13" selection-end-line="4" selection-end-column="13" />
+              <caret line="2" column="203" selection-start-line="2" selection-start-column="38" selection-end-line="2" selection-end-column="203" />
               <folding />
             </state>
           </provider>
@@ -47,8 +43,18 @@
       <file leaf-file-name="HackAssembler.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/HackAssembler.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.2662116">
-              <caret line="52" column="0" selection-start-line="52" selection-start-column="0" selection-end-line="52" selection-end-column="0" />
+            <state vertical-scroll-proportion="0.1569966">
+              <caret line="222" column="63" selection-start-line="222" selection-start-column="63" selection-end-line="222" selection-end-column="63" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="temporaryFile.txt" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/temporaryFile.txt">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0">
+              <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -58,7 +64,7 @@
         <entry file="file://$PROJECT_DIR$/src/test.java">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="5" column="113" selection-start-line="5" selection-start-column="53" selection-end-line="5" selection-end-column="113" />
+              <caret line="10" column="31" selection-start-line="10" selection-start-column="31" selection-end-line="10" selection-end-column="31" />
               <folding />
             </state>
           </provider>
@@ -89,13 +95,14 @@
       <list>
         <option value="$PROJECT_DIR$/src/shit.txt" />
         <option value="$PROJECT_DIR$/src/temporaryFile.txt" />
+        <option value="$PROJECT_DIR$/src/HackAssemblerParser.java" />
+        <option value="$PROJECT_DIR$/src/test.java" />
         <option value="$PROJECT_DIR$/src/HackAssembler.java" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds">
     <option name="x" value="-8" />
-    <option name="y" value="-8" />
     <option name="width" value="1684" />
     <option name="height" value="1026" />
   </component>
@@ -162,6 +169,9 @@
       </pane>
       <pane id="Scratches" />
     </panes>
+  </component>
+  <component name="PropertiesComponent">
+    <property name="extract.method.default.visibility" value="private" />
   </component>
   <component name="RunManager" selected="Application.test">
     <configuration default="false" name="test" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
@@ -455,7 +465,7 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="-8" width="1684" height="1026" extended-state="0" />
+    <frame x="-8" y="0" width="1684" height="1026" extended-state="0" />
     <editor active="true" />
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
@@ -499,10 +509,18 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/HackAssemblerParser.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="2" column="203" selection-start-line="2" selection-start-column="38" selection-end-line="2" selection-end-column="203" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/test.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
-          <caret line="5" column="113" selection-start-line="5" selection-start-column="53" selection-end-line="5" selection-end-column="113" />
+          <caret line="10" column="31" selection-start-line="10" selection-start-column="31" selection-end-line="10" selection-end-column="31" />
           <folding />
         </state>
       </provider>
@@ -515,18 +533,18 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/HackAssemblerParser.java">
+    <entry file="jar://C:/Program Files/Java/jdk1.8.0_73/jre/lib/rt.jar!/java/util/HashMap.class">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
-          <caret line="4" column="13" selection-start-line="4" selection-start-column="13" selection-end-line="4" selection-end-column="13" />
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/HackAssembler.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.2662116">
-          <caret line="52" column="0" selection-start-line="52" selection-start-column="0" selection-end-line="52" selection-end-column="0" />
+        <state vertical-scroll-proportion="0.1569966">
+          <caret line="222" column="63" selection-start-line="222" selection-start-column="63" selection-end-line="222" selection-end-column="63" />
           <folding />
         </state>
       </provider>
