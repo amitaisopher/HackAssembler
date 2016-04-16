@@ -3,12 +3,17 @@ bla
 (shity)
 kish
 Shtuyot
-
+@i
 (Maniak)
-kush
+kush //this is a comment
 bulbul
+@sum
 kus
 luz
-(tembel)
+(tembel)   //this is another comment
+@sum
+@i
 
+(Maniak)
 ynet
+kaka

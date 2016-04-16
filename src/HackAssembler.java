@@ -1,7 +1,4 @@
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.util.*;
 
 /**
@@ -9,6 +6,7 @@ import java.util.*;
  */
 public class HackAssembler {
     String inputFile;
+    String tempFile;
     String[][] jumpTable;
     String[][] destTable;
     String[][] computationTableForA;
@@ -18,6 +16,7 @@ public class HackAssembler {
     public HackAssembler (String inputFileName) {
         //this.inputFile = "shit.txt";
         this.inputFile = inputFileName;
+        this.tempFile = "C:\\Users\\Amitai Sopher\\IdeaProjects\\HackAssembler\\src\\temporaryFile.txt";
         this.jumpTable = new String [][] {{"null","JGT","JEQ","JGE","JLT","JNE","JLE","JMP"},
                                           {"000","001","010","011","100","101","110","111",}};
         this.destTable = new String [][] {{"null","M","D","MD","A","AM","AD","AMD"},
@@ -44,7 +43,13 @@ public class HackAssembler {
         this.symbolTable.put("R15","15");
         this.symbolTable.put("SCREEN","16384");
         this.symbolTable.put("KBD","24576");
+        this.symbolTable.put("SP","0");
+        this.symbolTable.put("LCL","1");
+        this.symbolTable.put("ARG","2");
+        this.symbolTable.put("THIS","3");
+        this.symbolTable.put("THAT","4");
 
+        this.deleteTempfile();
     }
 
     public int numOfLinesInInputFile () {
@@ -82,6 +87,24 @@ public class HackAssembler {
         return n;
     }
 
+    private void deleteTempfile() {
+        try{
+
+            File file = new File(this.tempFile);
+
+            if(file.delete()){
+                System.out.println(file.getName() + " is deleted!");
+            }else{
+                System.out.println("Delete operation is failed.");
+            }
+
+        }catch(Exception e){
+
+            e.printStackTrace();
+
+        }
+    }
+
     public String readLineNumber (int n) {
         String fileName = this.inputFile;
         String line = "";
@@ -117,18 +140,76 @@ public class HackAssembler {
         return line;
     }
 
-    public void symbolTableUpdater() {
+    public void writeLineToFile (String line) {
+        String outputFileName = "C:\\Users\\Amitai Sopher\\IdeaProjects\\HackAssembler\\src\\temporaryFile.txt";
+        BufferedWriter bufferedWriter = null;
+
+        try {
+            // Assume default encoding and configuring FileWriter to append lines to output file.
+            FileWriter fileWriter = new FileWriter(outputFileName, true);
+
+            // Always wrap FileWriter in BufferedWriter.
+            bufferedWriter = new BufferedWriter(fileWriter);
+
+            // Note that write() does not automatically
+            // append a new line character.
+            bufferedWriter.write(line);
+            bufferedWriter.newLine();
+            bufferedWriter.flush();
+        } catch (IOException ex) {
+            System.out.println("Error writing to file '" + outputFileName + "'");
+        } finally {
+            // Always close files.
+            try {
+                if (bufferedWriter !=null ){
+                    bufferedWriter.close();
+                }
+            } catch (IOException e) {
+
+            }
+        }
+    }
+
+    public void firstPass() {
         int realCommandCounter = 0;
+        int variableCounter = 16;
+        boolean isLastLine = false;
         for (int i = 0; i < this.numOfLinesInInputFile(); i++) {
             String line = this.readLineNumber(i+1);
+
+            // Filtering empty lines and comments and writing only pure instructions to a temporary file.
+            if (!line.startsWith("//") &&(line.trim().length() > 0)) {
+                if (line.contains("//")) {
+                    // Removing inline comments and spaces.
+                    line = line.substring(0,line.indexOf("/"));
+                    line = line.trim();
+                }
+                //System.out.println(line);
+                this.writeLineToFile(line);
+            }
+
             if (!line.startsWith("//") && !(line.startsWith("(") && line.endsWith(")")) && (line.trim().length() > 0)) {
                 realCommandCounter++;
             }
+            // Looking for new lables.
             if (line.startsWith("(") && line.endsWith(")")){
                 line = line.substring(1,line.length()-1);
-                System.out.println("The current line is " + line + " and the current realCommandCounter value is: " + realCommandCounter);
-                this.symbolTable.put(line, realCommandCounter);
+
+                // Checking if lable already exist in Symbol Table - if this is the first time we see this symbol then add it - otherwise ignore it.
+                if (!this.symbolTable.containsKey(line)) {
+                    //System.out.println("The current line is " + line + " and the current realCommandCounter value is: " + realCommandCounter);
+                    this.symbolTable.put(line, realCommandCounter);
+                }
             }
+            // Looking for new variables.
+            /*if (line.startsWith("@")) {
+                line = line.substring(1,line.length());
+                if (!this.symbolTable.containsKey(line)) {
+                    System.out.println("Detected variable " + line + " and the current Variable Counter value is: " + variableCounter);
+                    this.symbolTable.put(line, variableCounter);
+                    variableCounter++;
+                }
+            }*/
 
         }
     }
