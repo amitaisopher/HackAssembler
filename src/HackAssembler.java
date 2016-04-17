@@ -16,8 +16,8 @@ public class HackAssembler {
 
     public HackAssembler (String inputFileName) {
         this.inputFile = inputFileName;
-        this.tempFile = "C:\\Users\\Amitai Sopher\\IdeaProjects\\HackAssembler\\src\\temporaryFile.txt";
-        this.outputFile = "C:\\Users\\Amitai Sopher\\IdeaProjects\\HackAssembler\\src\\MachineCodeFile.txt";
+        this.tempFile = "C:\\Users\\sophea\\IdeaProjects\\HackAssembler\\src\\temporaryFile.txt";
+        this.outputFile = "C:\\Users\\sophea\\IdeaProjects\\HackAssembler\\src\\MachineCodeFile.txt";
         this.jumpTable = new String [][] {{"null","JGT","JEQ","JGE","JLT","JNE","JLE","JMP"},
                                           {"000","001","010","011","100","101","110","111",}};
         this.destTable = new String [][] {{"null","M","D","MD","A","AM","AD","AMD"},
@@ -218,8 +218,12 @@ public class HackAssembler {
         boolean isCInstruction = false;
         int variableCounter = 16;
         for (int i = 0; i < this.numOfLinesInFile(this.tempFile); i++) {
+            // Reading a line from temporary file.
             String line = readLineNumber(i+1,tempFile);
+
+            // If the line read is an A instruction than parse it and write to output file.
             variableCounter = parseAInstruction(variableCounter, line);
+            // If the line read is an C instruction than parse it and write to output file.
             // Function to parse C instruction should go below.
         }
     }
