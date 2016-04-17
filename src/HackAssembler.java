@@ -16,8 +16,8 @@ public class HackAssembler {
 
     public HackAssembler (String inputFileName) {
         this.inputFile = inputFileName;
-        this.tempFile = "C:\\Users\\sophea\\IdeaProjects\\HackAssembler\\src\\temporaryFile.txt";
-        this.outputFile = "C:\\Users\\sophea\\IdeaProjects\\HackAssembler\\src\\MachineCodeFile.txt";
+        this.tempFile = "C:\\Users\\Amitai Sopher\\IdeaProjects\\HackAssembler\\src\\temporaryFile.txt";
+        this.outputFile = "C:\\Users\\Amitai Sopher\\IdeaProjects\\HackAssembler\\src\\MachineCodeFile.txt";
         this.jumpTable = new String [][] {{"null","JGT","JEQ","JGE","JLT","JNE","JLE","JMP"},
                                           {"000","001","010","011","100","101","110","111",}};
         this.destTable = new String [][] {{"null","M","D","MD","A","AM","AD","AMD"},
@@ -217,14 +217,102 @@ public class HackAssembler {
         boolean isAInstruction = false;
         boolean isCInstruction = false;
         int variableCounter = 16;
+        String line;
         for (int i = 0; i < this.numOfLinesInFile(this.tempFile); i++) {
             // Reading a line from temporary file.
-            String line = readLineNumber(i+1,tempFile);
+            line = readLineNumber(i + 1, tempFile);
 
             // If the line read is an A instruction than parse it and write to output file.
             variableCounter = parseAInstruction(variableCounter, line);
             // If the line read is an C instruction than parse it and write to output file.
             // Function to parse C instruction should go below.
+            parseCInstruction(line);
+        }
+    }
+
+    private void parseCInstruction(String line) {
+        if (line.contains(";") && !line.contains("=")) {
+            String computation = line.substring(0, line.indexOf(";"));
+            String jumpToCommand = line.substring(line.indexOf(";") + 1, line.length());
+            for (int j = 0; j < this.jumpTable[0].length; j++) {
+                if (this.jumpTable[0][j].equals(jumpToCommand)) {
+                    jumpToCommand = this.jumpTable[1][j];
+                }
+            }
+            if (computation.contains("M")) {
+                for (int j = 0; j < this.computationTableForM[0].length; j++) {
+                    if (this.computationTableForM[0][j].equals(computation)) {
+                        computation = this.computationTableForM[1][j];
+                        computation = "0" + computation; // Adding the "A" bit value
+                    }
+                }
+            } else if (!computation.contains("M")) {
+                for (int j = 0; j < this.computationTableForA[0].length; j++) {
+                    if (this.computationTableForA[0][j].equals(computation)) {
+                        computation = this.computationTableForA[1][j];
+                        computation = "1" + computation; // Adding the "A" bit value
+                    }
+                }
+            }
+            line = "111" + computation + "000" + jumpToCommand;
+            writeLineToFile(line,this.outputFile);
+        } else if (line.contains(";") && line.contains("=")) {
+            String destination = line.substring(0, line.indexOf("="));
+            String computation = line.substring(line.indexOf("=")+1, line.indexOf(";"));
+            String jumptocommand = line.substring(line.indexOf(";") + 1, line.length());
+            for (int j = 0; j < this.destTable[0].length; j++) {
+                if (this.destTable[0][j].equals(destination)) {
+                    destination = this.destTable[1][j];
+                }
+            }
+
+            for (int j = 0; j < this.jumpTable[0].length; j++) {
+                if (this.jumpTable[0][j].equals(jumptocommand)) {
+                    jumptocommand = this.jumpTable[1][j];
+                }
+            }
+            if (computation.contains("M")) {
+                for (int j = 0; j < this.computationTableForM[0].length; j++) {
+                    if (this.computationTableForM[0][j].equals(computation)) {
+                        computation = this.computationTableForM[1][j];
+                        computation = "0" + computation; // Adding the "A" bit value
+                    }
+                }
+            } else if (!computation.contains("M")) {
+                for (int j = 0; j < this.computationTableForA[0].length; j++) {
+                    if (this.computationTableForA[0][j].equals(computation)) {
+                        computation = this.computationTableForA[1][j];
+                        computation = "1" + computation; // Adding the "A" bit value
+                    }
+                }
+            }
+            line = "111" + computation + destination + jumptocommand;
+            writeLineToFile(line,this.outputFile);
+        } else if (!line.contains(";") && line.contains("=")) { // Parsing in case there are only desination and computation.
+            String destination = line.substring(0, line.indexOf("="));
+            String computation = line.substring(line.indexOf("=")+1, line.length());
+            for (int j = 0; j < this.destTable[0].length; j++) {
+                if (this.destTable[0][j].equals(destination)) {
+                    destination = this.destTable[1][j];
+                }
+            }
+            if (computation.contains("M")) {
+                for (int j = 0; j < this.computationTableForM[0].length; j++) {
+                    if (this.computationTableForM[0][j].equals(computation)) {
+                        computation = this.computationTableForM[1][j];
+                        computation = "0" + computation; // Adding the "A" bit value
+                    }
+                }
+            } else if (!computation.contains("M")) {
+                for (int j = 0; j < this.computationTableForA[0].length; j++) {
+                    if (this.computationTableForA[0][j].equals(computation)) {
+                        computation = this.computationTableForA[1][j];
+                        computation = "1" + computation; // Adding the "A" bit value
+                    }
+                }
+            }
+            line = "111" + computation + destination + "000";
+            writeLineToFile(line, this.outputFile);
         }
     }
 
@@ -234,14 +322,26 @@ public class HackAssembler {
             line = line.substring(1,line.length());
 
             // If it is a new variable add it to symbol table, assign address to it and replace the variable name with address in the line.
-            if (!this.symbolTable.containsKey(line)) {
-                //System.out.println("Detected variable " + line + " and the current Variable Counter value is: " + variableCounter);
-                this.symbolTable.put(line, variableCounter);
-                line = convertAInstructionToBinaryCode(variableCounter);
-                writeLineToFile(line,this.outputFile);
-                variableCounter++;
+            boolean isString = false;
+            try {
+                Integer.parseInt(line);
+            } catch (java.lang.NumberFormatException ex) {
+                isString = true;
+            }
+            if (isString) {
+                if (!this.symbolTable.containsKey(line)) {
+                    //System.out.println("Detected variable " + line + " and the current Variable Counter value is: " + variableCounter);
+                    this.symbolTable.put(line, variableCounter);
+                    line = convertAInstructionToBinaryCode(variableCounter);
+                    writeLineToFile(line,this.outputFile);
+                    variableCounter++;
+                } else {
+                    System.out.println(this.symbolTable.entrySet());
+                    line = (String) this.symbolTable.get(line);
+                    line = convertAInstructionToBinaryCode(Integer.parseInt(line));
+                    writeLineToFile(line,this.outputFile);
+                }
             } else {
-                line = (String) this.symbolTable.get(line);
                 line = convertAInstructionToBinaryCode(Integer.parseInt(line));
                 writeLineToFile(line,this.outputFile);
             }
